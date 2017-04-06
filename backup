@@ -56,10 +56,20 @@ if [ "$1" == "backup" ]; then
   FILENAME=$FILEPREFIX$DATE.tar.gz
   FILE=/backup/backup-$FILENAME
 
+  echo ""
+  echo "Step 1) mongodump"
   mongodump -h $MONGO_HOST -p $MONGO_PORT $DB_ARG
+
+  echo ""
+  echo "Step 2) tar the result of mongodump"
   tar -zcvf $FILE dump/
+
+  echo ""
+  echo "Step 3) upload to s3 bucket"
   aws s3api put-object --bucket $S3BUCKET --key $FILENAME --body $FILE
-  echo "Cleaning up..."
+
+  echo ""
+  echo "Step 4) Clean up"
   rm -rf dump/ $FILE
 elif [ "$1" == "list" ]; then
   echo "Listing backups..."
