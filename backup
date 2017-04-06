@@ -56,7 +56,7 @@ if [ "$1" == "backup" ]; then
   FILENAME=$FILEPREFIX$DATE.tar.gz
   FILE=/backup/backup-$FILENAME
 
-  mongodump --quiet -h $MONGO_HOST -p $MONGO_PORT $DB_ARG
+  mongodump -h $MONGO_HOST -p $MONGO_PORT $DB_ARG
   tar -zcvf $FILE dump/
   aws s3api put-object --bucket $S3BUCKET --key $FILENAME --body $FILE
   echo "Cleaning up..."
